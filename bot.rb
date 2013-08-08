@@ -29,16 +29,6 @@ module Wa2Bot
       @posts = Wa2Bot::Configure.load_posts.map {|obj| Post.new(obj)}
     end
 
-    def parse_tweet(post)
-      char = Wa2Bot::Character.new(post.char)
-      message = "「#{post.content.gsub("\n", " ")}」"
-
-      # When do not have a unique icon, add character name
-      message = char.lastname + message if char.icon == 'img/180x180_2s.jpg'
-
-      return char.icon, message
-    end
-
     def search_wa2
       keywords = ['#wa2', "#whitealbum2", "ホワイトアルバム２"]
       results = []
@@ -47,7 +37,6 @@ module Wa2Bot
       end
       return results.flatten
     end
-
 
     def select_popular_tweet(tweets)
       tweets.sort! {|a, b|
@@ -71,7 +60,7 @@ module Wa2Bot
     end
 
     def tweet
-      icon, message = parse_tweet(@posts.sample)
+      icon, message = @posts.sample.convert_to_tweet
       @client.update_profile_image File.new(icon)
       @client.update message
     end

@@ -2,6 +2,14 @@ module Wa2Bot
   class Character
     attr_accessor :firstname, :lastname, :fullname, :icon
 
+    ICONS = {
+      defalut: 'img/180x180_2s.jpg',
+      setsuna: 'img/wa2_twicon01.png',
+      kazusa: 'img/wa2_twicon02.png',
+      koharu: 'img/wa2_twicon03.png',
+      chiaki: 'img/wa2_twicon04.png',
+      mari: 'img/wa2_twicon05.png' }
+
     # キャラクターの設定
     CHAR_DEFINISION = [
       {
@@ -11,31 +19,31 @@ module Wa2Bot
       {
         name: ['和泉', '千晶'], # 名字、名前
         regexp: /千晶|ちあき/, # 名前の表記ブレ用正規表現
-        icon: 'img/wa2_twicon04.png' # アイコン画像のパス
+        icon: :chiaki
       },
       {
         name: ['小木曽', '雪菜'],
         regexp: /雪菜|せつな/,
-        icon: 'img/wa2_twicon01.png'
+        icon: :setsuna
       },
       {
         name: ['風岡', '麻理'],
         regexp: /麻理|まり/,
-        icon: 'img/wa2_twicon05.png'
+        icon: :mari
       },
       {
         name: ['杉浦', '小春'],
         regexp: /小春|こはる/,
-        icon: 'img/wa2_twicon03.png'
+        icon: :koharu
       },
       {
         name: ['北原', '春希'],
-        regexp: /春希|はるき/
+        regexp: /春希|はるき/,
       },
       {
         name: ['冬馬', 'かずさ'],
         regexp: /かずさ/,
-        icon: 'img/wa2_twicon02.png'
+        icon: :kazusa
       },
       {
         name: ['冬馬', '曜子'],
@@ -59,7 +67,7 @@ module Wa2Bot
         @firstname = ''
         @lastname = ''
         @fullname = src
-        @icon = 'img/180x180_2s.jpg'
+        @icon = ICONS[:defalut]
       end
     end
 
@@ -69,7 +77,7 @@ module Wa2Bot
           @firstname = obj[:name].first
           @lastname = obj[:name].last
           @fullname = obj[:name].first + obj[:name].last
-          @icon = (obj.include? :icon) ? obj[:icon] : 'img/180x180_2s.jpg'
+          @icon = (obj.include? :icon) ? ICONS[obj[:icon]] : ICONS[:defalut]
           return
         end
       end

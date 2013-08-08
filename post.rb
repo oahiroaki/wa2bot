@@ -1,12 +1,24 @@
+require './bot'
+
 module Wa2Bot
   class Post
-    attr_accessor :id, :char, :content, :number
+    attr_accessor :char, :content
 
     def initialize(obj)
-      @id = obj['id'].to_i
-      @char = obj['char']
+      @char = Wa2Bot::Character.new obj['char']
       @content = obj['post']
-      @number = obj['num'].to_i || 0
+    end
+
+    # return icon image and tweet text
+    def convert_to_tweet
+      message = "「#{@content.gsub("\n", " ")}」"
+
+      # When do not have a unique icon, add character name
+      if @char.icon == Wa2Bot::Character::ICONS[:defalut]
+        message += @char.lastname
+      end
+
+      return @char.icon, message
     end
   end
 end
