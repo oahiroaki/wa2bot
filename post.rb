@@ -4,7 +4,7 @@ module Wa2Bot
 
     def initialize(obj)
       @char = Wa2Bot::Character.new obj['char']
-      @content = obj['content']
+      @content = obj['post']
     end
 
     # return icon image and tweet text

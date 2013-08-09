@@ -7,7 +7,7 @@ class TestPost < MiniTest::Unit::TestCase
   def test_initialize
     post = Wa2Bot::Post.new({
       'char' => '北原春希',
-      'content' => '一番、大切なひとだけを救おうって、そう、決めたんだ'})
+      'post' => '一番、大切なひとだけを救おうって、そう、決めたんだ'})
 
     assert_equal post.char.firstname, '北原'
     assert_equal post.char.lastname, '春希'
@@ -20,7 +20,7 @@ class TestPost < MiniTest::Unit::TestCase
   def test_convert_to_tweet_with_icon
     post = Wa2Bot::Post.new({
       'char' => '小木曽雪菜',
-      'content' => "あと五分でいい…\nこれから五分間にわたしの言うことだけは、永遠に、忘れて！"})
+      'post' => "あと五分でいい…\nこれから五分間にわたしの言うことだけは、永遠に、忘れて！"})
 
     icon, message = post.convert_to_tweet
     assert_equal icon, Wa2Bot::Character::ICONS[:setsuna]
@@ -32,7 +32,7 @@ class TestPost < MiniTest::Unit::TestCase
   def test_convert_to_tweet_with_noicon
     post = Wa2Bot::Post.new({
       'char' => '柳原朋',
-      'content' => "test message"})
+      'post' => "test message"})
 
     icon, message = post.convert_to_tweet
     assert_equal icon, Wa2Bot::Character::ICONS[:defalut]
