@@ -9,6 +9,7 @@ require './character'
 module Wa2Bot
   class Bot
     include Singleton
+    SEARCH_KEYWORDS = ['#wa2', "#whitealbum2"]
 
     def initialize
       if File.exist? Wa2Bot::Configure::TOKEN_FILE
@@ -31,10 +32,8 @@ module Wa2Bot
     end
 
     def search_wa2
-      keywords = ['#wa2', "#whitealbum2", "ホワイトアルバム２"]
-      results = []
-      keywords.each do |query|
-        results << @client.search(query, {lang: 'ja'}).results
+      results = SEARCH_KEYWORDS.inject([]) do |array, query|
+        array << @client.search(query, {lang: 'ja'}).results
       end
       return results.flatten
     end
