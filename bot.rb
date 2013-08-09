@@ -11,7 +11,8 @@ module Wa2Bot
     include Singleton
 
     def initialize
-      if File.exist? 'token.yml'
+      if File.exist? Wa2Bot::Configure::TOKEN_FILE
+        # When token.yml file exist, load oauth keys from it.
         tokens = Wa2Bot::Configure.load_token
         @client = Twitter::Client.new(
           consumer_key: tokens['consumer_key'],
@@ -52,7 +53,7 @@ module Wa2Bot
     end
 
     def retweet
-      @client.update_profile_image File.new('img/180x180_2s.jpg')
+      # @client.update_profile_image File.new(Wa2Bot::Character::ICONS[:defalut])
       target_id = select_popular_tweet search_wa2
       # Save retweet id
       Wa2Bot::Configure.save_retweeted_id target_id

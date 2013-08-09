@@ -8,7 +8,8 @@ module Wa2Bot
       kazusa: 'img/wa2_twicon02.png',
       koharu: 'img/wa2_twicon03.png',
       chiaki: 'img/wa2_twicon04.png',
-      mari: 'img/wa2_twicon05.png' }
+      mari: 'img/wa2_twicon05.png',
+      haruki: 'img/haruki.png' }
 
     # キャラクターの設定
     CHAR_DEFINISION = [
@@ -39,6 +40,7 @@ module Wa2Bot
       {
         name: ['北原', '春希'],
         regexp: /春希|はるき/,
+        icon: :haruki
       },
       {
         name: ['冬馬', 'かずさ'],
@@ -64,8 +66,8 @@ module Wa2Bot
         parse_name(src)
       rescue => err
         # Undefined character
-        @firstname = ''
-        @lastname = ''
+        @firstname = src
+        @lastname = src
         @fullname = src
         @icon = ICONS[:defalut]
       end
