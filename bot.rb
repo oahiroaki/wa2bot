@@ -4,12 +4,12 @@ require 'singleton'
 require './post'
 require './configure'
 require './character'
-
+require './diff'
+require './search'
 
 module Wa2Bot
   class Bot
     include Singleton
-    SEARCH_KEYWORDS = ['#wa2', "#whitealbum2"]
 
     def initialize
       if File.exist? Wa2Bot::Configure::TOKEN_FILE
@@ -31,38 +31,20 @@ module Wa2Bot
       @posts = Wa2Bot::Configure.load_posts.map {|obj| Post.new(obj)}
     end
 
-    def search_wa2
-      results = SEARCH_KEYWORDS.inject([]) do |array, query|
-        array << @client.search(query, {lang: 'ja'}).results
-      end
-      return results.flatten
-    end
-
-    def select_popular_tweet(tweets)
-      tweets.sort! {|a, b|
-        asum = a.favorite_count + a.retweet_count
-        bsum = b.favorite_count + b.retweet_count
-        bsum <=> asum
-      }
-
-      ids = Wa2Bot::Configure.load_retweeted_ids
-      tweets.each do |tweet|
-        return tweet.id unless ids.include?(tweet.id)
-      end
-    end
-
-    def retweet
-      # @client.update_profile_image File.new(Wa2Bot::Character::ICONS[:defalut])
-      target_id = select_popular_tweet search_wa2
-      # Save retweet id
-      Wa2Bot::Configure.save_retweeted_id target_id
-      @client.retweet target_id
-    end
-
     def tweet
       icon, message = @posts.sample.convert_to_tweet
       @client.update_profile_image File.new(icon)
       @client.update message
+    end
+
+    def retweet
+      Wa2Bot::save_searched_tweets Wa2Bot::Search.get_all_tweets
+      target_tweet = Wa2Bot::Configure.get_most_priority_tweet
+      @client.retweet target_tweet[:id]
+    end
+
+    def search(query)
+      return @client.search(query, {lang: 'ja'}).results
     end
 
     def update_follower
