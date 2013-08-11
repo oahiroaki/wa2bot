@@ -3,8 +3,10 @@ module Wa2Bot
     SEARCH_KEYWORDS = ['#wa2', '#wa2anime']
     HISTORY_LENGTH = 60
     HISTORY_FILE = 'history.yml'
+    RETWEET_FILE = 'retweet.yml'
 
     @@keyword_index = 0
+    @@retweeted_ids = []
 
     module_function
 
@@ -38,8 +40,18 @@ module Wa2Bot
 
     def get_most_priority_tweet
       tweets = load_searched_tweets
-      tweet = tweets.shift
+      ids = load_retweet_id
+      target = nil
+      tweets.each do |tweet|
+        unless ids.include? tweet.id
+          target = tweet
+          ids << tweet.id
+          break
+        end
+      end
+      tweets.delete target
       write_history_file tweets
+      write_retweet_id ids
       return tweet
     end
 
@@ -58,6 +70,15 @@ module Wa2Bot
 
     def get_all_tweets
       return remove_duplication(load_searched_tweets + search)
+    end
+
+    def write_retweet_id(ids)
+      ids = ids[-10, 10] if ids.length > 10
+      File.open(RETWEET_FILE, 'w') {|file| YAML.dump(ids, file)}
+    end
+
+    def load_retweet_id
+      return (File.exist? RETWEET_FILE) ? YAML.load_file(RETWEET_FILE) : []
     end
 
     def write_history_file(tweets)

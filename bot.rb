@@ -42,7 +42,7 @@ module Wa2Bot
       @client.retweet target_tweet[:id]
     end
 
-    def search_wa2
+    def update_searchresult
       tweets = Wa2Bot::Search.get_all_tweets
       Wa2Bot::Search.save_searched_tweets tweets
     end
