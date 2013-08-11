@@ -33,7 +33,7 @@ module Wa2Bot
     end
 
     def load_searched_tweets
-      return YAML.load_file(HISTORY_FILE)
+      return (File.exist? HISTORY_FILE) ? YAML.load_file(HISTORY_FILE) : []
     end
 
     def get_most_priority_tweet

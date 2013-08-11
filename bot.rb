@@ -38,9 +38,13 @@ module Wa2Bot
     end
 
     def retweet
-      Wa2Bot::save_searched_tweets Wa2Bot::Search.get_all_tweets
-      target_tweet = Wa2Bot::Configure.get_most_priority_tweet
+      target_tweet = Wa2Bot::Search.get_most_priority_tweet
       @client.retweet target_tweet[:id]
+    end
+
+    def search_wa2
+      tweets = Wa2Bot::Search.get_all_tweets
+      Wa2Bot::Search.save_searched_tweets tweets
     end
 
     def search(query)
