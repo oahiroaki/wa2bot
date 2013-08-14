@@ -2,3 +2,5 @@
 vendor/
 tags
 token.yml
+retweet.yml
+history.yml
