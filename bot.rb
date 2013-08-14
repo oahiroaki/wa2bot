@@ -43,8 +43,7 @@ module Wa2Bot
     end
 
     def update_searchresult
-      tweets = Wa2Bot::Search.get_all_tweets
-      Wa2Bot::Search.save_searched_tweets tweets
+      Wa2Bot::Search.save_searched_tweets
     end
 
     def search(query)
@@ -56,9 +55,9 @@ module Wa2Bot
       frineds = @client.friend_ids.all # following
 
       # Unfollow
-      (frineds - followers)[0, 10].each {|id| @client.unfollow id}
+      (frineds - followers)[0, 5].each {|id| @client.unfollow id}
       # Follow
-      (followers - frineds)[0, 10].each {|id| @client.follow id}
+      (followers - frineds)[0, 5].each {|id| @client.follow id}
     end
   end
 end

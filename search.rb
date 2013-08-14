@@ -38,38 +38,49 @@ module Wa2Bot
       return (File.exist? HISTORY_FILE) ? YAML.load_file(HISTORY_FILE) : []
     end
 
+    def write_history_file(tweets)
+      File.open(HISTORY_FILE, 'w') {|file| YAML.dump(tweets, file)}
+    end
+
+    def save_searched_tweets
+      new_tweets = search
+      old_tweets = load_searched_tweets
+
+      tweets = sort_tweets_by_fav_and_rt_count(
+        remove_duplication(old_tweets + new_tweets))
+
+      if (tweets.length > HISTORY_LENGTH)
+        tweets = tweets[-HISTORY_LENGTH, HISTORY_LENGTH]
+      end
+
+      write_history_file tweets
+    end
+
     def get_most_priority_tweet
       tweets = load_searched_tweets
       ids = load_retweet_id
-      target = nil
       tweets.each do |tweet|
-        unless ids.include? tweet.id
-          target = tweet
-          ids << tweet.id
-          break
+        unless ids.include? tweet[:id]
+          ids << tweet[:id]
+          write_retweet_id ids
+          return tweet
         end
       end
-      tweets.delete target
-      write_history_file tweets
-      write_retweet_id ids
-      return tweet
     end
 
     def remove_duplication(tweets)
       texts = []
+      ids = []
       unique_tweets = []
       tweets.each do |tweet|
-        unless texts.include? tweet[:text]
+        unless texts.include?(tweet[:text]) or ids.include?(tweet[:id])
           texts << tweet[:text]
+          ids << tweet[:id]
           unique_tweets << tweet
         end
       end
 
       return unique_tweets
-    end
-
-    def get_all_tweets
-      return remove_duplication(load_searched_tweets + search)
     end
 
     def write_retweet_id(ids)
@@ -79,20 +90,6 @@ module Wa2Bot
 
     def load_retweet_id
       return (File.exist? RETWEET_FILE) ? YAML.load_file(RETWEET_FILE) : []
-    end
-
-    def write_history_file(tweets)
-      File.open(HISTORY_FILE, 'w') {|file| YAML.dump(tweets, file)}
-    end
-
-    def save_searched_tweets(tweets)
-      if (tweets.length > HISTORY_LENGTH)
-        new_tweets = tweets[-HISTORY_LENGTH, HISTORY_LENGTH]
-      else
-        new_tweets = tweets
-      end
-
-      write_history_file sort_tweets_by_fav_and_rt_count(new_tweets)
     end
 
     def sort_tweets_by_fav_and_rt_count(tweets)
