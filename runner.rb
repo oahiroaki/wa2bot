@@ -29,6 +29,6 @@ every(
 every(1.hour, 'update', at: ['10:30', '14:30', '18:30', '22:30', '2:30'])
 
 # たまにリツィート
-every(1.hour, 'retweet', at: ['12:30', '16:30', '20:30', '0:30'])
+every(1.hour, 'retweet', at: ['12:30', '22:30'])
 
 every(1.hour, 'follow', at: '3:30')
