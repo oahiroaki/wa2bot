@@ -1,6 +1,7 @@
 .bundle
 vendor
 tags
+Gemfile.lock
 ext/token.yml
 ext/retweet.yml
 ext/history.yml
