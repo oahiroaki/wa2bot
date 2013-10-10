@@ -1,6 +1,6 @@
 require 'minitest/unit'
 require 'minitest/autorun'
-require './character'
+require './lib/wa2bot/character.rb'
 
 class TestCharacter < MiniTest::Unit::TestCase
   def test_initialize_unknown

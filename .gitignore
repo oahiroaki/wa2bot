@@ -1,6 +1,6 @@
-.bundle/
-vendor/
+.bundle
+vendor
 tags
-token.yml
-retweet.yml
-history.yml
+ext/token.yml
+ext/retweet.yml
+ext/history.yml

@@ -1,7 +1,6 @@
 require 'minitest/unit'
 require 'minitest/autorun'
-
-require './bot'
+require './lib/wa2bot.rb'
 
 class TestPost < MiniTest::Unit::TestCase
   def test_initialize
