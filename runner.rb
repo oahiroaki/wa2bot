@@ -1,5 +1,5 @@
 require 'clockwork'
-require './bot'
+require './lib/wa2bot.rb'
 
 include Clockwork
 
