@@ -9,11 +9,11 @@ module Wa2Bot
 
     # return icon image and tweet text
     def convert_to_tweet
-      message = "「#{@content.gsub("\n", " ")}」"
+      message = "#{@content.gsub("\n", " ")}"
 
       # When do not have a unique icon, add character name
-      if @char.icon == Wa2Bot::Character::ICONS[:defalut]
-        message = @char.lastname + message
+      if Wa2Bot::Character::ICONS[:defalut].include? @char.icon
+        message = "#{@char.lastname}: #{message}"
       end
 
       return @char.icon, message

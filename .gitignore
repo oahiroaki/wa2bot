@@ -2,6 +2,6 @@
 vendor
 tags
 Gemfile.lock
-ext/token.yml
-ext/retweet.yml
-ext/history.yml
+conf/token.yml
+log/retweet.yml
+log/history.yml

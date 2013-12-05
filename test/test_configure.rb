@@ -3,14 +3,12 @@ require 'minitest/autorun'
 require './lib/wa2bot.rb'
 
 class TestConfigure < MiniTest::Unit::TestCase
-  def setup
-  end
-
-  def teardown
-  end
-
   def test_load_token
-    assert_raises(RuntimeError) {Wa2Bot::Configure.load_token}
+    tokens = Wa2Bot::Configure.load_token
+    assert_equal(
+      tokens.keys,
+      %w(consumer_key consumer_secret access_token access_token_secret)
+    )
   end
 
   def test_load_posts

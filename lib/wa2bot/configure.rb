@@ -2,24 +2,31 @@ require 'yaml'
 
 module Wa2Bot
   module Configure
-    TOKEN_FILE = './ext/token.yml'
-    POST_FILE = './ext/posts.yml'
-    RETWEETED_FILE = './ext/retweet.yml'
+    TOKEN_FILE = './conf/token.yml'
+    POST_FILE = './conf/posts.yml'
+    RETWEETED_FILE = './conf/retweet.yml'
     RETWEET_CACHE_NUM = 10
 
     module_function
 
     def load_token
       if File.exist? TOKEN_FILE
-        return YAML.load_file(TOKEN_FILE)
+        YAML.load_file TOKEN_FILE
+      elsif ENV[CONSUMER_KEY]
+        {
+          'consumer_key' => ENV['CONSUMER_KEY'],
+          'consumer_secret' => ENV['CONSUMER_SECRET'],
+          'access_token' => ENV['ACCESS_TOKEN'],
+          'access_token_secret' => ENV['ACCESS_TOKEN_SECRET']
+        }
       else
-        raise "Token file does not found"
+        raise "Token does not found"
       end
     end
 
     def load_posts
       if File.exist? POST_FILE
-        return YAML.load_file(POST_FILE)
+        return YAML.load_file POST_FILE
       else
         raise "Posts file does not found"
       end
@@ -27,9 +34,9 @@ module Wa2Bot
 
     def load_retweeted_ids
       unless File.exist? RETWEETED_FILE
-        File.write(RETWEETED_FILE, "")
+        File.write RETWEETED_FILE, ""
       end
-      return YAML.load_file(RETWEETED_FILE)
+      YAML.load_file RETWEETED_FILE
     end
 
     def save_retweeted_id(id)

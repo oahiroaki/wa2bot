@@ -2,20 +2,26 @@ module Wa2Bot
   module Search
     SEARCH_KEYWORDS = ['#wa2', '#wa2anime']
     HISTORY_LENGTH = 60
-    HISTORY_FILE = 'history.yml'
-    RETWEET_FILE = 'retweet.yml'
+    RT_HISTORY_LENGTH = 10
+    HISTORY_FILE = './log/history.yml'
+    RETWEET_FILE = './log/retweet.yml'
 
     @@keyword_index = 0
     @@retweeted_ids = []
 
     module_function
 
+    # execute search by using twitter api
     def search
       tweets = Wa2Bot::Bot.instance.search SEARCH_KEYWORDS[@@keyword_index]
 
-      update_keyword_index
+      # update keyword index
+      @@keyword_index += 1
+      if @@keyword_index > SEARCH_KEYWORDS.length - 1
+        @@keyword_index = 0
+      end
 
-      return tweets.flatten.map {|tweet|
+      tweets.flatten.map {|tweet|
         {
           id: tweet.id,
           favorite_count: tweet.favorite_count,
@@ -26,46 +32,47 @@ module Wa2Bot
       }
     end
 
-    def update_keyword_index
-      @@keyword_index += 1
-      if @@keyword_index > SEARCH_KEYWORDS.length - 1
-        @@keyword_index = 0
-      end
-      return @@keyword_index
-    end
-
     def load_searched_tweets
-      return (File.exist? HISTORY_FILE) ? YAML.load_file(HISTORY_FILE) : []
+      (File.exist? HISTORY_FILE) ? YAML.load_file(HISTORY_FILE) : []
     end
 
-    def write_history_file(tweets)
-      File.open(HISTORY_FILE, 'w') {|file| YAML.dump(tweets, file)}
+    def load_retweet_id
+      (File.exist? RETWEET_FILE) ? YAML.load_file(RETWEET_FILE) : []
     end
 
-    def save_searched_tweets
+    def save_searched_tweets(source=nil)
       new_tweets = search
       old_tweets = load_searched_tweets
 
-      tweets = sort_tweets_by_fav_and_rt_count(
-        remove_duplication(old_tweets + new_tweets))
+      if source
+        tweets = source
+      else
+        tweets = sort_tweets_by_fav_and_rt_count(
+          remove_duplication(old_tweets + new_tweets))
+      end
 
       if (tweets.length > HISTORY_LENGTH)
+        # slice from last index by HISTORY_LENGTH
         tweets = tweets[-HISTORY_LENGTH, HISTORY_LENGTH]
       end
 
-      write_history_file tweets
+      # write to history file
+      File.open(HISTORY_FILE, 'w') {|file| YAML.dump(tweets, file)}
     end
 
     def get_most_priority_tweet
       tweets = load_searched_tweets
       ids = load_retweet_id
+      priority_tweet = nil
       tweets.each do |tweet|
+        # check this tweet is retweeted before
         unless ids.include? tweet[:id]
           ids << tweet[:id]
           write_retweet_id ids
-          return tweet
+          priority_tweet = tweet
         end
       end
+      priority_tweet || tweets.sample
     end
 
     def remove_duplication(tweets)
@@ -80,16 +87,14 @@ module Wa2Bot
         end
       end
 
-      return unique_tweets
+      unique_tweets
     end
 
     def write_retweet_id(ids)
-      ids = ids[-10, 10] if ids.length > 10
+      if ids.length > RT_HISTORY_LENGTH
+        ids = ids[-RT_HISTORY_LENGTH, RT_HISTORY_LENGTH]
+      end
       File.open(RETWEET_FILE, 'w') {|file| YAML.dump(ids, file)}
-    end
-
-    def load_retweet_id
-      return (File.exist? RETWEET_FILE) ? YAML.load_file(RETWEET_FILE) : []
     end
 
     def sort_tweets_by_fav_and_rt_count(tweets)
