@@ -12,7 +12,7 @@ module Wa2Bot
     def load_token
       if File.exist? TOKEN_FILE
         YAML.load_file TOKEN_FILE
-      elsif ENV[CONSUMER_KEY]
+      elsif ENV['CONSUMER_KEY']
         {
           'consumer_key' => ENV['CONSUMER_KEY'],
           'consumer_secret' => ENV['CONSUMER_SECRET'],
