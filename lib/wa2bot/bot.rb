@@ -6,6 +6,13 @@ module Wa2Bot
     include Singleton
 
     def initialize
+      Twitter.configure do |config|
+        config.connection_options =
+          Twitter::Default::CONNECTION_OPTIONS.merge(
+            :request => {
+              :open_timeout => 10,
+              :timeout => 10 })
+      end
       tokens = Wa2Bot::Configure.load_token
       @client = Twitter::Client.new(
         consumer_key: tokens['consumer_key'],
