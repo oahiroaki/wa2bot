@@ -46,6 +46,7 @@ PLATFORMS
 
 DEPENDENCIES
   clockwork
+  minitest
   pry
   pry-byebug
   twitter

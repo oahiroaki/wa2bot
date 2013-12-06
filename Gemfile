@@ -6,6 +6,7 @@ gem 'clockwork'
 gem 'twitter'
 
 group :development do
+  gem 'minitest'
   gem 'pry'
   gem 'pry-byebug'
 end
