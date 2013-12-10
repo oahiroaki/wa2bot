@@ -3,9 +3,7 @@ require 'yaml'
 module Wa2Bot
   module Configure
     TOKEN_FILE = './conf/token.yml'
-    POST_FILE = './conf/posts.yml'
-    RETWEETED_FILE = './conf/retweet.yml'
-    RETWEET_CACHE_NUM = 10
+    POSTS_FILE = './conf/posts.yml'
 
     module_function
 
@@ -25,24 +23,11 @@ module Wa2Bot
     end
 
     def load_posts
-      if File.exist? POST_FILE
-        return YAML.load_file POST_FILE
+      if File.exist? POSTS_FILE
+        YAML.load_file POSTS_FILE
       else
-        raise "Posts file does not found"
+        raise "Posts does not found"
       end
-    end
-
-    def load_retweeted_ids
-      unless File.exist? RETWEETED_FILE
-        File.write RETWEETED_FILE, ""
-      end
-      YAML.load_file RETWEETED_FILE
-    end
-
-    def save_retweeted_id(id)
-      temp = load_retweeted_ids + [id]
-      temp.shift if temp.length > RETWEET_CACHE_NUM
-      File.open(RETWEETED_FILE, 'w') {|f| YAML.dump(temp, f)}
     end
   end
 end

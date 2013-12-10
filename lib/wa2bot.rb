@@ -1,3 +1,5 @@
-%w(bot character configure post search).each do |path|
-  require File.expand_path('../wa2bot/' + path, __FILE__)
-end
+require File.expand_path('wa2bot/bot', __dir__)
+require File.expand_path('wa2bot/configure', __dir__)
+require File.expand_path('wa2bot/character', __dir__)
+require File.expand_path('wa2bot/post', __dir__)
+require File.expand_path('wa2bot/search', __dir__)

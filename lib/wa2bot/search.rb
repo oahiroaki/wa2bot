@@ -46,6 +46,7 @@ module Wa2Bot
 
       # write to history file
       File.open(HISTORY_FILE, 'w') {|file| YAML.dump(tweets, file)}
+      new_tweets
     end
 
     def save_retweet_id(ids)
