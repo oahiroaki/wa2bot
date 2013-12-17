@@ -1,9 +1,7 @@
-require 'minitest/unit'
 require 'minitest/autorun'
-require './lib/wa2bot.rb'
 
-class TestConfigure < MiniTest::Unit::TestCase
-  def test_load_token
+class TestConfigure < Minitest::Test
+  def test_load_token_found
     tokens = Wa2Bot::Configure.load_token
     assert_equal(
       tokens.keys,
@@ -11,11 +9,23 @@ class TestConfigure < MiniTest::Unit::TestCase
     )
   end
 
-  def test_load_posts
+  def test_load_token_not_found
+    File.stub(:exist?, false) do
+      assert_raises(RuntimeError) {Wa2Bot::Configure.load_token}
+    end
+  end
+
+  def test_load_posts_found
     posts = Wa2Bot::Configure.load_posts
     assert_equal(
       {"char" => "北原春希", "post" => "一番、大切なひとだけを救おうって、そう、決めたんだ"},
       posts[0]
     )
+  end
+
+  def test_load_posts_not_found
+    File.stub(:exist?, false) do
+      assert_raises(RuntimeError) {Wa2Bot::Configure.load_posts}
+    end
   end
 end

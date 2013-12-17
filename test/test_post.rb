@@ -1,21 +1,6 @@
-require 'minitest/unit'
 require 'minitest/autorun'
-require './lib/wa2bot.rb'
 
-class TestPost < MiniTest::Unit::TestCase
-  def test_initialize
-    post = Wa2Bot::Post.new({
-      'char' => '北原春希',
-      'post' => '一番、大切なひとだけを救おうって、そう、決めたんだ'})
-
-    assert_equal post.char.firstname, '北原'
-    assert_equal post.char.lastname, '春希'
-
-    assert_equal(
-      post.content,
-      '一番、大切なひとだけを救おうって、そう、決めたんだ')
-  end
-
+class TestPost < Minitest::Test
   def test_convert_to_tweet_with_icon
     post = Wa2Bot::Post.new({
       'char' => '小木曽雪菜',

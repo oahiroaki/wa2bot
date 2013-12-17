@@ -1,28 +1,35 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (4.0.0)
+    activesupport (3.2.16)
       i18n (~> 0.6, >= 0.6.4)
-      minitest (~> 4.2)
-      multi_json (~> 1.3)
-      thread_safe (~> 0.1)
-      tzinfo (~> 0.3.37)
-    atomic (1.1.12)
-    byebug (2.4.0)
+      multi_json (~> 1.0)
+    addressable (2.3.5)
+    atomic (1.1.14)
+    buftok (0.2.0)
+    byebug (2.4.1)
       columnize (~> 0.3.6)
       debugger-linecache (~> 1.2.0)
-    clockwork (0.5.4)
+    clockwork (0.7.0)
       activesupport
       tzinfo (~> 0.3.35)
     coderay (1.1.0)
     columnize (0.3.6)
     debugger-linecache (1.2.0)
+    descendants_tracker (0.0.3)
+    equalizer (0.0.7)
     faraday (0.8.8)
       multipart-post (~> 1.2.0)
-    i18n (0.6.4)
+    http (0.5.0)
+      http_parser.rb
+    http_parser.rb (0.6.0)
+    i18n (0.6.9)
+    json (1.8.1)
+    memoizable (0.2.0)
+      thread_safe (~> 0.1.3)
     method_source (0.8.2)
-    minitest (4.7.5)
-    multi_json (1.7.8)
+    minitest (5.1.0)
+    multi_json (1.8.2)
     multipart-post (1.2.0)
     pry (0.9.12.4)
       coderay (~> 1.0)
@@ -31,15 +38,23 @@ GEM
     pry-byebug (1.2.0)
       byebug (~> 2.2)
       pry (~> 0.9.12)
+    rake (0.9.6)
     simple_oauth (0.2.0)
     slop (3.4.7)
-    thread_safe (0.1.2)
+    thread_safe (0.1.3)
       atomic
-    twitter (4.8.1)
-      faraday (~> 0.8, < 0.10)
-      multi_json (~> 1.0)
-      simple_oauth (~> 0.2)
-    tzinfo (0.3.37)
+    twitter (5.2.0)
+      addressable (~> 2.3)
+      buftok (~> 0.2.0)
+      descendants_tracker (~> 0.0.1)
+      equalizer (~> 0.0.7, != 0.0.8)
+      faraday (>= 0.8, < 0.10)
+      http (~> 0.5.0)
+      http_parser.rb (~> 0.6.0)
+      json (~> 1.8)
+      memoizable (~> 0.2.0)
+      simple_oauth (~> 0.2.0)
+    tzinfo (0.3.38)
 
 PLATFORMS
   ruby
@@ -49,4 +64,5 @@ DEPENDENCIES
   minitest
   pry
   pry-byebug
+  rake
   twitter
